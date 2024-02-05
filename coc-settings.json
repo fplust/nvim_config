@@ -1,0 +1,24 @@
+{
+    "diagnostic.displayByAle": true,
+    "diagnostic.infoSign": "●",
+    "diagnostic.errorSign": "●",
+    "diagnostic.warningSign": "●",
+    "diagnostic.hintSign": "●",
+    "languageserver": {
+      "ccls": {
+        "command": "ccls",
+        "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+        "rootPatterns": [".ccls-root", "compile_commands.json"],
+        "initializationOptions": {
+          "cache": {
+            "directory": ".ccls-cache"
+          },
+          "client": {
+            "snippetSupport": true
+          }
+        }
+      }
+    },
+    "rust-analyzer.server.path": "~/.local/bin/rust-analyzer",
+    "rust-analyzer.inlayHints.chainingHints": false
+}
