@@ -100,3 +100,24 @@ opt.termguicolors = true
 
 -- session
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
+
+-- diagnostic
+vim.diagnostic.config({
+  underline = true,
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    header = false,
+    source = 'always',
+    border = 'single',
+  },
+  virtual_text = false,
+  -- virtual_text = {
+  --   spacing = 4,
+  --   source = 'always',
+  --   severity = {
+  --     min = vim.diagnostic.severity.HINT,
+  --   },
+  -- },
+})

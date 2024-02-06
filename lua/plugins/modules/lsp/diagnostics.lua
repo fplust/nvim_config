@@ -1,29 +1,4 @@
-local config = require('plugins.modules.lsp.config')
 local icons = require('core.theme.icons')
-
-local defaults = {
-  underline = true,
-  signs = true,
-  update_in_insert = false,
-  severity_sort = true,
-  float = {
-    header = false,
-    source = 'always',
-    border = 'single',
-  },
-  virtual_text = false,
-  --[[ virtual_text = {
-    spacing = 4,
-    source = 'always',
-    severity = {
-      min = vim.diagnostic.severity.HINT,
-    },
-  }, ]]
-}
-
-local opts = defaults
-
-vim.diagnostic.config(opts)
 
 local function do_diagnostic_signs()
   local signs = {
@@ -58,5 +33,5 @@ local function do_legacy_diagnostic_signs()
   end
 end
 
-do_diagnostic_signs()
-do_legacy_diagnostic_signs()
+-- do_diagnostic_signs()
+-- do_legacy_diagnostic_signs()
