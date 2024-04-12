@@ -1,6 +1,5 @@
 local cmp = require('cmp')
 local luasnip = require('luasnip')
-require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 vim.cmd([[
@@ -64,14 +63,14 @@ cmp.setup({
       winhighlight = 'FloatBorder:FloatBorder,Normal:Normal',
     },
   },
-  experimental = {
-    ghost_text = true,
-  },
+  -- experimental = {
+  --   ghost_text = true,
+  -- },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
-    { name = 'nvim_lua' },
-    { name = 'buffer' },
     { name = 'luasnip' },
+    -- { name = 'nvim_lua' },
+    { name = 'buffer' },
     { name = 'path' },
   }),
 })

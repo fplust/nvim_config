@@ -1,26 +1,13 @@
 local icons = require('core.theme.icons')
--- local lsp_status = require('lsp-status')
---
--- lsp_status.config({
---   indicator_errors = 'E',
---   indicator_warnings = 'W',
---   indicator_info = 'i',
---   indicator_hint = '?',
---   indicator_ok = 'Ok',
--- })
---
--- lsp_status.register_progress()
--- local function lsp()
---     return require('lsp-status').status()
--- end
-
 
 require('lualine').setup({
   options = {
     icons_enabled = true,
     theme = 'everforest',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    -- component_separators = { left = icons.arrow_right, right = icons.arrow_left},
+    -- section_separators = { left = icons.arrow_right_filled, right = icons.arrow_left_filled},
+    component_separators = '',
+    section_separators = '',
     disabled_filetypes = {},
     always_divide_middle = true,
     globalstatus = true,

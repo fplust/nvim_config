@@ -1,5 +1,5 @@
 return {
-  { 'tpope/vim-repeat' },
+  { 'tpope/vim-repeat', lazy = false },
 
   --[[ use({ -- color scheme
     'ishan9299/nvim-solarized-lua',
@@ -20,7 +20,7 @@ return {
     'nvim-lualine/lualine.nvim',
     event = "VeryLazy",
     config = function()
-      require('plugins.modules.statusline')
+      require('plugins.modules.lualine')
     end,
   },
 
@@ -28,9 +28,8 @@ return {
   {
     'kyazdani42/nvim-tree.lua',
     config = function()
-      require('plugins.modules.file-explorer').init()
+      require('plugins.modules.nvim-tree').init()
     end,
-    lazy = true,
     cmd = {
       'NvimTreeClipboard',
       'NvimTreeClose',
@@ -43,21 +42,21 @@ return {
 
   {
     "j-hui/fidget.nvim",
+    event = "VeryLazy",
     opts = {
       -- options
+      notification = {
+          override_vim_notify = true,
+      }
     },
-    init = function()
-      vim.notify = require("fidget").notify
-    end,
+    -- init = function()
+    --   vim.notify = require("fidget").notify
+    -- end,
   },
   -- lsp
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-      -- 'ray-x/lsp_signature.nvim',
-    },
+    event = { "BufReadPost", "BufNewFile", "BufWritePre" },
     config = function()
       require('plugins.modules.lsp')
     end,
@@ -73,7 +72,6 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'hrsh7th/cmp-nvim-lua',
       'saadparwaiz1/cmp_luasnip',
       'windwp/nvim-autopairs',
       {
@@ -81,15 +79,19 @@ return {
         version = "v2.*",
         -- install jsregexp (optional!).
         build = "make install_jsregexp",
+        dependencies = {
+          "rafamadriz/friendly-snippets",
+          config = function()
+            require('luasnip.loaders.from_vscode').lazy_load()
+          end,
+        }
       },
-      "rafamadriz/friendly-snippets",
     },
-    event = "InsertEnter",
+    event = {"InsertEnter"},
   },
   -- git commands
   {
     'tpope/vim-fugitive',
-    lazy = true,
     cmd = {'Git', 'Gdiff', 'Gdiffsplit'},
   },
 
@@ -97,10 +99,10 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    event = 'BufRead',
+    event = 'BufReadPost',
     opts = {
         on_attach = function(bufnr)
-          local gs = package.loaded.gitsigns
+          local gs = require('gitsigns')
 
           local function map(mode, l, r, opts)
             opts = opts or {}
@@ -110,28 +112,31 @@ return {
 
           -- Navigation
           map('n', ']c', function()
-            if vim.wo.diff then return ']c' end
-            vim.schedule(function() gs.next_hunk() end)
-            return '<Ignore>'
-          end, {expr=true})
+            if vim.wo.diff then
+              vim.cmd.normal({']c', bang = true})
+            else
+              gs.nav_hunk('next')
+            end
+          end, {desc='next hunk'})
 
           map('n', '[c', function()
-            if vim.wo.diff then return '[c' end
-            vim.schedule(function() gs.prev_hunk() end)
-            return '<Ignore>'
-          end, {expr=true})
+            if vim.wo.diff then
+              vim.cmd.normal({'[c', bang = true})
+            else
+              gs.nav_hunk('prev')
+            end
+          end, {desc='prev hunk'})
 
           -- Actions
-          map({'n', 'v'}, '<leader>hs', ':Gitsigns stage_hunk<CR>')
-          map({'n', 'v'}, '<leader>hr', ':Gitsigns reset_hunk<CR>')
-          -- map('n', '<leader>hS', gs.stage_buffer)
-          -- map('n', '<leader>hR', gs.reset_buffer)
-          map('n', '<leader>hu', gs.undo_stage_hunk)
-          -- map('n', '[h', gs.preview_hunk)
-          -- map('n', ']h', gs.next_hunk)
-          map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-          map('n', '<leader>tb', gs.toggle_current_line_blame)
-          map('n', '<leader>hd', gs.diffthis)
+          map({'n', 'v'}, '<leader>hs', gs.stage_hunk, {desc='stage hunk'})
+          map({'n', 'v'}, '<leader>hr', gs.reset_hunk, {desc='reset hunk'})
+          map('n', '<leader>hS', gs.stage_buffer, {desc='stage buffer'})
+          map('n', '<leader>hR', gs.reset_buffer, {desc='reset buffer'})
+          map('n', '<leader>hu', gs.undo_stage_hunk, {desc='undo stage_hunk'})
+          map('n', '<leader>hp', gs.preview_hunk, {desc='preview hunk'})
+          map('n', '<leader>hb', function() gs.blame_line{full=true} end, {desc='blame line'})
+          map('n', '<leader>tb', gs.toggle_current_line_blame, {desc='toggle current line blame'})
+          map('n', '<leader>hd', gs.diffthis, {desc='diff this'})
           -- map('n', '<leader>hD', function() gs.diffthis('~') end)
           -- map('n', '<leader>td', gs.toggle_deleted)
 
@@ -142,21 +147,19 @@ return {
   },
 
   -- terminal
-  {
-    "akinsho/toggleterm.nvim",
-    version = '*',
-    lazy = true,
-    cmd = {'ToggleTerm', 'TermSelect'},
-    config = function()
-      require('plugins.modules.terminal')
-    end
-  },
+  -- {
+  --   "akinsho/toggleterm.nvim",
+  --   version = '*',
+  --   cmd = {'ToggleTerm', 'TermSelect'},
+  --   config = function()
+  --     require('plugins.modules.terminal')
+  --   end
+  -- },
 
   -- file navigation
   {
     'nvim-telescope/telescope.nvim',
     dependencies = {
-      'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
@@ -164,22 +167,22 @@ return {
       },
     },
     config = function()
-      require('plugins.modules.navigation')
+      require('plugins.modules.telescope')
     end,
     cmd={'Telescope'},
-    -- event = 'BufRead',
   },
   {
     'stevearc/dressing.nvim',
+    event = "VeryLazy",
     opts = {},
   },
-  {
-    "folke/trouble.nvim",
-    config = function()
-      require("plugins.modules.trouble")
-    end;
-    event = 'BufRead',
-  },
+  -- {
+  --   "folke/trouble.nvim",
+  --   config = function()
+  --     require("plugins.modules.trouble")
+  --   end;
+  --   event = 'BufReadPost',
+  -- },
 
   -- session management
   -- use({
@@ -209,14 +212,26 @@ return {
   {
     'numToStr/Comment.nvim',
     config = true,
-    event = 'BufRead',
+    event = 'BufReadPost',
+    opts = {
+      opleader = {
+        line = 'grc',
+        block = 'grb',
+      }
+    }
   },
 
   -- surround
   {
     "kylechui/nvim-surround",
     config = true,
-    event = 'BufRead',
+    event = 'BufReadPost',
+    opts = {
+      keymaps = {
+        normal_cur = "yls",
+        normal_cur_line = "ylS",
+      }
+    }
   },
 
   -- colorized hex codes
@@ -240,5 +255,11 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     }
+  },
+  {
+    'stevearc/overseer.nvim',
+    cmd = {'OverseerRun', 'OverseerToggle'},
+    opts = {
+    },
   },
 }

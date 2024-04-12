@@ -1,16 +1,4 @@
-local mason = require("mason")
-local mason_lspconfig = require('mason-lspconfig')
-
-
-mason.setup({
-  ui = {
-    icons = {
-      package_installed = "✓",
-      package_pending = "➜",
-      package_uninstalled = "✗"
-    }
-  }
-})
+local lspconfig = require('lspconfig')
 
 local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
@@ -35,8 +23,9 @@ local on_attach = function(_, bufnr)
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>sd', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>sw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>d', require('telescope.builtin').diagnostics, "Diagnostics")
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -53,7 +42,7 @@ local on_attach = function(_, bufnr)
   -- diagnostics
   nmap('[g', vim.diagnostic.goto_prev, '[D]iagnostic [P]revious')
   nmap(']g', vim.diagnostic.goto_next, '[D]iagnostic [Nlext')
-  -- nmap('<leader>gf', vim.lsp.buf.formatting, '[F]ormatting')
+  nmap('<leader>gf', vim.lsp.buf.format, '[F]ormatting')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -78,29 +67,43 @@ local on_attach = function(_, bufnr)
 end
 
 local servers = {
-  -- clangd = {},
+  clangd = {},
   -- gopls = {},
-  pyright = {
-
-  },
+  pyright = {},
   rust_analyzer = {},
-  -- tsserver = {},
+  tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 }
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
-}
-mason_lspconfig.setup_handlers({
-  function (server_name) -- default handler (optional)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-    }
-  end,
-})
+for k, v in pairs(servers) do
+  lspconfig[k].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }
+end
+
+-- efm config
+-- lspconfig.efm.setup {
+--     init_options = {documentFormatting = true},
+--     filetypes = { 'javascript', 'python', 'typescript' },
+--     settings = {
+--       rootMarkers = {".git/"},
+--       languages = {
+--         python = {
+--           {
+--             prefix = "ruff",
+--             formatCommand = "ruff format --no-cache --stdin-filename '${INPUT}'",
+--             formatStdin = true,
+--             lintSource = "efm ruff",
+--             lintCommand = "ruff check --stdin-filename '${INPUT}'",
+--             lintStdin = true,
+--             lintFormats = { '%.%#:%l:%c: %t%n %m' },
+--             lintSeverity = 4,
+--             lintOnSave = true,
+--           }
+--         }
+--       }
+--     }
+-- }

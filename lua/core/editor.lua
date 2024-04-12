@@ -11,11 +11,15 @@ end
 -- 	filetype plugin indent on
 -- 	autocmd BufWritePre * :%s/\s\+$//e
 -- ]])
+cmd([[
+    autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
+]])
 
 g.mapleader = ' '
 g.everforest_background = 'hard'
 g.everforest_sign_column_background = 'none'
 g.everforest_enable_italic = 1
+g.editorconfig = false
 
 -- misc
 opt.syntax = 'enable'
@@ -121,3 +125,6 @@ vim.diagnostic.config({
   --   },
   -- },
 })
+
+-- gui
+opt.guifont= "Iosevka Term Medium:h12"
