@@ -102,9 +102,6 @@ opt.ttimeoutlen = 50
 -- theme
 opt.termguicolors = true
 
--- session
-opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
-
 -- diagnostic
 vim.diagnostic.config({
   underline = true,
@@ -128,3 +125,10 @@ vim.diagnostic.config({
 
 -- gui
 opt.guifont= "Iosevka Term Medium:h12"
+
+-- session
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.api.nvim_create_user_command('Q', 'mksession! Session.vim | qa', {})
+if vim.fn.findfile("Session.vim") ~= '' then
+    cmd("source Session.vim")
+end

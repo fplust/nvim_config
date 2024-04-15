@@ -1,7 +1,8 @@
 local map = require('core.utils').map
 
 -- Quickfix
-map('n', '<leader>co', ':copen <CR>', { noremap = true , desc="open quickfix"})
+map('n', '<leader>ck', ':cex []<CR>', { noremap = true, desc="empty quickfix" })
+map('n', '<leader>co', ':copen <CR>', { noremap = true, desc="open quickfix"})
 map('n', '<leader>cc', ':cclose <CR>', { noremap = true, desc="close quickfix" })
 -- map('n', '<leader>cf', ':cfdo %s/', { noremap = true })
 -- map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { noremap = true, desc="close buffer" })
