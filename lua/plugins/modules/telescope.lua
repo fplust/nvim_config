@@ -26,6 +26,12 @@ local opts_vertical = {
   },
 }
 
+local file_picker = function()
+  local state = require("telescope.actions.state")
+  local builtin = require("telescope.builtin")
+  return builtin.find_files({ ["default_text"] = state.get_current_line() })
+end
+
 require('telescope').setup({
   defaults = {
     prompt_prefix = '> ',
@@ -65,6 +71,9 @@ require('telescope').setup({
         n = {
           ['d'] = actions.delete_buffer,
         },
+        i = {
+          ["<C-f>"] = file_picker,
+        }
       }, mappings),
       sort_mru = true,
       preview_title = false,
@@ -99,6 +108,11 @@ require('telescope').setup({
     live_grep = {
       prompt_title = '✨ Live Grep ✨',
       mappings = mappings,
+    },
+    git_branches = {
+      mappings = {
+        i = { ["<cr>"] = actions.git_switch_branch },
+      },
     },
   },
 })

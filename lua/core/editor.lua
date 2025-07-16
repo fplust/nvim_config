@@ -16,14 +16,14 @@ cmd([[
 ]])
 
 g.mapleader = ' '
-g.everforest_background = 'hard'
-g.everforest_sign_column_background = 'none'
-g.everforest_enable_italic = 1
+-- g.everforest_sign_column_background = 'none'
+-- g.everforest_enable_italic = 1
 g.editorconfig = false
 
 -- misc
 opt.syntax = 'enable'
 opt.bg = 'dark'
+-- opt.bg = 'light'
 opt.hidden = true
 opt.encoding = 'utf-8'
 opt.fileencodings = 'utf-8,ucs-bom,gb18030,gbk,gb2312,cp936,big5,sjis,default'
@@ -35,10 +35,11 @@ opt.foldmethod = "indent"
 opt.foldlevel = 99
 -- opt.foldmethod = "expr"
 -- opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.undofile = true
 
 -- indention
 opt.autoindent = true
--- opt.smartindent = true
+opt.smartindent = true
 
 -- tabs
 opt.tabstop = indent
@@ -52,13 +53,13 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.wildignore = opt.wildignore + { '*/node_modules/*', '*/wp-includes/*', '*/wp-admin/*', '*/vendor/*' }
 opt.hlsearch = false
-if executable('rg') then
-  opt.grepprg = [[rg --hidden --glob "!.git" --no-heading --smart-case --vimgrep --follow $*]]
-  opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
-elseif executable('ag') then
-  opt.grepprg = [[ag --nogroup --nocolor --vimgrep]]
-  opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
-end
+-- if executable('rg') then
+--   opt.grepprg = [[rg --hidden --glob "!.git" --no-heading --smart-case --vimgrep --follow $*]]
+--   opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
+-- elseif executable('ag') then
+--   opt.grepprg = [[ag --nogroup --nocolor --vimgrep]]
+--  opt.grepformat = '%f:%l:%c:%m,%f:%l:%m'
+-- end
 
 -- ui
 opt.number = true
@@ -129,6 +130,3 @@ opt.guifont= "Iosevka Term Medium:h12"
 -- session
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.api.nvim_create_user_command('Q', 'mksession! Session.vim | qa', {})
-if vim.fn.findfile("Session.vim") ~= '' then
-    cmd("source Session.vim")
-end

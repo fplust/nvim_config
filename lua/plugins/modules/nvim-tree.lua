@@ -19,7 +19,7 @@ function M.init()
           git = false,
           folder = false,
           file = false,
-          folder_arrow = false,
+          folder_arrow = true,
         },
         glyphs = {
           default = '',

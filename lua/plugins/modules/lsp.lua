@@ -1,31 +1,9 @@
 local lspconfig = require('lspconfig')
+local nmap = require('core.utils').nmap
 
-local on_attach = function(_, bufnr)
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-  end
-  local vmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('v', keys, func, { buffer = bufnr, desc = desc })
-  end
-
+local on_attach = function(client, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>sd', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>sw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-  nmap('<leader>d', require('telescope.builtin').diagnostics, "Diagnostics")
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -39,9 +17,6 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  -- diagnostics
-  nmap('[g', vim.diagnostic.goto_prev, '[D]iagnostic [P]revious')
-  nmap(']g', vim.diagnostic.goto_next, '[D]iagnostic [Nlext')
   nmap('<leader>gf', vim.lsp.buf.format, '[F]ormatting')
 
   -- Create a command `:Format` local to the LSP buffer
@@ -64,6 +39,9 @@ local on_attach = function(_, bufnr)
       vim.diagnostic.open_float(nil, opts)
     end
   })
+  -- if client.server_capabilities.documentSymbolProvider then
+  --   require("nvim-navic").attach(client, bufnr)
+  -- end
 end
 
 local servers = {
@@ -71,11 +49,11 @@ local servers = {
   -- gopls = {},
   pyright = {},
   rust_analyzer = {},
-  tsserver = {},
+  ts_ls = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 }
 
-capabilities = require('cmp_nvim_lsp').default_capabilities()
+capabilities = require('blink.cmp').get_lsp_capabilities()
 
 for k, v in pairs(servers) do
   lspconfig[k].setup {

@@ -8,8 +8,10 @@ map('n', '<leader>cc', ':cclose <CR>', { noremap = true, desc="close quickfix" }
 -- map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { noremap = true, desc="close buffer" })
 map('n', '<F1>', ':Git<CR>', { noremap = true })
 
-require('core.mappings.telescope').init()
+map('n', '<leader>u', ':UndotreeToggle<CR>', { noremap = true })
+
+-- require('core.mappings.telescope').init()
+require('core.mappings.fzf-lua').init()
 require('core.mappings.nvim-tree')
 require('core.mappings.terminal')
 -- require('core.mappings.trouble')
--- require('core.modules.lsp.mappings')

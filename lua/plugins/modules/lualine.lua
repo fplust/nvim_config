@@ -3,7 +3,7 @@ local icons = require('core.theme.icons')
 require('lualine').setup({
   options = {
     icons_enabled = true,
-    theme = 'everforest',
+    -- theme = 'solarized',
     -- component_separators = { left = icons.arrow_right, right = icons.arrow_left},
     -- section_separators = { left = icons.arrow_right_filled, right = icons.arrow_left_filled},
     component_separators = '',
@@ -19,7 +19,10 @@ require('lualine').setup({
         sources={'nvim_diagnostic', 'coc'},
         symbols = {error = icons.error, warn = icons.warn, info = icons.info, hint = icons.hint}
       }},
-    lualine_c = {'filename'},
+    lualine_c = {
+      {'filename', file_status = true, path = 1}, 
+      -- { 'navic' }
+    },
     lualine_x = {'encoding', 'bo:fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
@@ -33,5 +36,10 @@ require('lualine').setup({
     lualine_z = {}
   },
   tabline = {},
-  extensions = {'quickfix', 'nvim-tree', 'fugitive'}
+  -- winbar = {
+  --   lualine_c = {
+  --    { 'navic' }
+  --   }
+  -- },
+  extensions = {'quickfix', 'nvim-tree', 'fugitive', 'lazy'}
 })

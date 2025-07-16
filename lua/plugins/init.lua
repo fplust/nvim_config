@@ -34,6 +34,7 @@ require("lazy").setup("plugins.config", {
         'rrhelper',
         'spellfile_plugin',
         'matchit',
+        'editorconfig',
       },
     },
   },

@@ -22,6 +22,15 @@ function M.split(str, sep)
   return res
 end
 
+function M.nmap(keys, func, desc)
+  vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+end
+
+function M.vmap(keys, func, desc)
+  vim.keymap.set('v', keys, func, { buffer = bufnr, desc = desc })
+end
+
+
 function M.highlight(group, bg, fg, gui)
   if gui ~= nil and gui ~= '' then
     vim.api.nvim_command(string.format('hi %s guibg=%s guifg=%s gui=%s', group, bg, fg, gui))
