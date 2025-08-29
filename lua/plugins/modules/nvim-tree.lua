@@ -1,5 +1,5 @@
 local g = vim.g
-local icons = require('core.theme.icons')
+local icons = require('plugins.icons')
 local M = {}
 
 function M.init()

@@ -1,4 +1,4 @@
-local icons = require('core.theme.icons')
+local icons = require('plugins.icons')
 
 require('lualine').setup({
   options = {
@@ -16,7 +16,7 @@ require('lualine').setup({
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', {
         'diagnostics',
-        sources={'nvim_diagnostic', 'coc'},
+        sources={'nvim_diagnostic'},
         symbols = {error = icons.error, warn = icons.warn, info = icons.info, hint = icons.hint}
       }},
     lualine_c = {
