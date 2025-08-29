@@ -86,8 +86,8 @@ opt.listchars = {
 opt.showmode = false
 opt.lazyredraw = true
 opt.mouse = 'a'
--- opt.splitright = true -- Open new split to the right
--- opt.splitbelow = true -- Open new split below
+opt.splitright = true -- Open new split to the right
+opt.splitbelow = true -- Open new split below
 
 -- backups
 opt.swapfile = false
@@ -142,8 +142,8 @@ vim.diagnostic.config({
 opt.guifont= "Iosevka Term Medium:h12"
 
 -- session
-opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-vim.api.nvim_create_user_command('Q', 'mksession! .vimsession | qa', {})
+-- opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
+-- vim.api.nvim_create_user_command('Q', 'mksession! .vimsession | qa', {})
 
 -- mapping
 local map = function(mode, lhs, rhs, opts)
@@ -160,7 +160,8 @@ map('n', '<leader>co', ':botright copen <CR>', { desc="open quickfix"})
 map('n', '<leader>cc', ':cclose <CR>', { desc="close quickfix" })
 -- map('n', '<leader>cf', ':cfdo %s/')
 -- map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc="close buffer" })
-map('n', '<F1>', ':Git<CR>')
+-- map('n', '<F1>', ':Git<CR>')
+map('n', '<F2>', ':lua MiniSessions.select()<CR>')
 
 map('n', '<leader>u', ':UndotreeToggle<CR>')
 
@@ -215,9 +216,4 @@ map('n', '<leader>r', ':NvimTreeRefresh<CR>')
 -- plugins
 require("plugins")
 require("im-select").setup()
-
--- load .vimsession
-if vim.fn.argc() == 0 and vim.fn.findfile(".vimsession") ~= '' then
-    vim.cmd("source .vimsession")
-end
 

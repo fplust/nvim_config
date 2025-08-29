@@ -62,7 +62,7 @@ local config = {
   -- lsp
   {
     'neovim/nvim-lspconfig',
-    event = "VeryLazy",
+    lazy = false,
     config = function()
       vim.lsp.enable("clangd")
       vim.lsp.enable("pyright")
@@ -74,7 +74,7 @@ local config = {
   -- autocompletion
   {
     'saghen/blink.cmp',
-    event = "VeryLazy",
+    event = "InsertEnter",
     -- optional: provides snippets for the snippet source
     dependencies = { 'rafamadriz/friendly-snippets' },
   
@@ -130,19 +130,38 @@ local config = {
 
   -- git column signs
   {
-    'echasnovski/mini.diff',
+    'nvim-mini/mini.diff',
     version = '*',
-    event = 'VeryLazy',
+    event = "VeryLazy",
     config = function()
       require('mini.diff').setup()
     end
   },
   {
-    'echasnovski/mini.pairs',
+    'nvim-mini/mini.pairs',
     version = '*',
-    event = 'VeryLazy',
+    event = "VeryLazy",
     config = function()
       require('mini.pairs').setup()
+    end
+  },
+  {
+    'nvim-mini/mini.sessions',
+    version = '*',
+    lazy = false,
+    config = function()
+      require('mini.sessions').setup({
+        autoread = false,
+        file = '.vimsession'
+      })
+    end
+  },
+  {
+    'nvim-mini/mini.starter',
+    version = '*',
+    event = "VimEnter",
+    config = function()
+      require('mini.starter').setup()
     end
   },
 
@@ -155,6 +174,11 @@ local config = {
             preview = {
                 hidden = true,
             }
+        },
+        git = {
+            branches = {
+                cmd = "git branch --sort=-committerdate --color"
+            }
         }
     }
   },
@@ -162,6 +186,7 @@ local config = {
   {
     'nvim-treesitter/nvim-treesitter',
     event = 'VeryLazy',
+    lazy = vim.fn.argc(-1) == 0,
     build = ':TSUpdate',
     config = function()
       local configs = require('nvim-treesitter.configs')
@@ -181,7 +206,7 @@ local config = {
   {
     "kylechui/nvim-surround",
     config = true,
-    event = 'BufReadPost',
+    event = "VeryLazy",
     opts = {
       keymaps = {
         normal_cur = "yls",
